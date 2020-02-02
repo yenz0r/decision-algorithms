@@ -12,11 +12,9 @@ class ResultViewController: UIViewController {
     private var tableView: UITableView!
 
     private let pointsProvider: IResolver
-    private let colors: [UIColor]
 
-    init(provider: IResolver, colors: [UIColor]) {
+    init(provider: IResolver) {
         self.pointsProvider = provider
-        self.colors = colors
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -56,7 +54,7 @@ extension ResultViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "resultPointCell", for: indexPath)
         let point = self.pointsProvider.clusters[indexPath.section].points[indexPath.row]
         cell.textLabel?.text = "x = \(point.x) ~ y = \(point.y)"
-        cell.backgroundColor = self.colors[indexPath.row]
+        cell.backgroundColor = self.pointsProvider.clusters[indexPath.section].colors[indexPath.row]
         return cell
     }
 }

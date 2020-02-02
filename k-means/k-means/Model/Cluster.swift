@@ -6,12 +6,13 @@
 //  Copyright © 2020 yenz0redd. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import CoreGraphics
 
 protocol ICluster {
     var points: [CGPoint] { get }
     var cetroid: CGPoint { get set }
+    var colors: [UIColor] { get set }
     func addPoint(_ point: CGPoint)
     func clear()
 }
@@ -19,6 +20,8 @@ protocol ICluster {
 class Cluster {
     private var insidePoints: [CGPoint]
     private var insideCetroid: CGPoint?
+
+    var colors: [UIColor] = []
 
     init() {
         self.insidePoints = []

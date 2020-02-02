@@ -20,7 +20,6 @@ class ViewController: UIViewController {
     }
 
     private var resolveProvider: IResolver!
-    private var resultColors = [UIColor]()
 
     private var clustersCountTextField: UITextField!
     private var pointsCountTextField: UITextField!
@@ -97,7 +96,12 @@ class ViewController: UIViewController {
          self.clustersCountTextField].forEach { $0?.textAlignment = .center }
 
         self.pointsCountTextField.placeholder = "Points count"
+        self.pointsCountTextField.textColor = .black
+        self.pointsCountTextField.keyboardType = .numberPad
+
         self.clustersCountTextField.placeholder = "Clusters count"
+        self.clustersCountTextField.textColor = .black
+        self.clustersCountTextField.keyboardType = .numberPad
 
         self.segmentControl.selectedSegmentIndex = 0
         self.segmentControl.addTarget(self, action: #selector(segmentControlChanged), for: .valueChanged)
@@ -142,13 +146,13 @@ class ViewController: UIViewController {
 
     @objc private func showButtonTapped() {
         let resultViewController = ResultViewController(
-            provider: self.resolveProvider,
-            colors: self.resultColors
+            provider: self.resolveProvider
         )
         self.present(resultViewController, animated: true, completion: nil)
     }
 
     @objc private func startButtonTapped() {
+        self.view.endEditing(true)
         var clustersCount = 0
         if !(self.currentResolverType == .maximin) {
             guard let count = Int(self.clustersCountTextField.text ?? "-") else { return }
@@ -185,29 +189,29 @@ class ViewController: UIViewController {
     }
 
     private func drawImage(with pointsProvider: IResolver, for size: CGSize, completion: ((UIImage) -> Void)?) {
-        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-            self?.resultColors = []
+        DispatchQueue.global(qos: .userInteractive).async {
             let renderer = UIGraphicsImageRenderer(size: CGSize(width: size.width + 20, height: size.height + 20))
             let img = renderer.image { ctx in
                 ctx.cgContext.setLineWidth(1)
 
                 for cluster in pointsProvider.clusters {
+                    var resultColors = [UIColor]()
                     let randColor = UIColor(
                         red: CGFloat(Int.random(in: 0..<256)) / 255.0,
                         green: CGFloat(Int.random(in: 0..<256)) / 255.0,
                         blue: CGFloat(Int.random(in: 0..<256)) / 255.0,
                         alpha: 1
                     )
-                    self?.resultColors.append(randColor)
                     ctx.cgContext.setStrokeColor(UIColor.white.cgColor)
                     ctx.cgContext.setFillColor(randColor.cgColor)
 
                     for point in cluster.points {
                         let rectangle = CGRect(x: point.x, y: point.y, width: 20, height: 20)
                         ctx.cgContext.addEllipse(in: rectangle)
+                        resultColors.append(randColor)
                     }
                     ctx.cgContext.drawPath(using: .fillStroke)
-
+                    cluster.colors = resultColors
                     let centerRect = CGRect(
                         x: cluster.cetroid.x,
                         y: cluster.cetroid.y,
