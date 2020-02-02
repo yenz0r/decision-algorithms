@@ -9,7 +9,7 @@
 import Foundation
 import CoreGraphics
 
-class KMeans {
+class KMeans: IResolver {
     var points: [CGPoint] = []
     var clusters: [Cluster] = []
 

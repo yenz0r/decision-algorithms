@@ -10,9 +10,22 @@ import UIKit
 import SnapKit
 
 class ViewController: UIViewController {
+    enum ResolverType {
+        case kmeans
+        case maximin
+
+        static func resolverAt(_ index: Int) -> ResolverType {
+            return index == 0 ? .kmeans : .maximin
+        }
+    }
+
+    private var resolveProvider: IResolver!
+    private var resultColors = [UIColor]()
+
     private var clustersCountTextField: UITextField!
     private var pointsCountTextField: UITextField!
     private var startButton: UIButton!
+    private var showResultsButton: UIButton!
     private var stackView: UIStackView!
 
     private var segmentControl: UISegmentedControl!
@@ -20,6 +33,19 @@ class ViewController: UIViewController {
     private var loader: UIActivityIndicatorView!
 
     private var imageView: UIImageView!
+
+    private var currentResolverType = ResolverType.kmeans {
+        didSet {
+            if self.currentResolverType == .maximin {
+                self.clustersCountTextField.text = ""
+                self.clustersCountTextField.placeholder = "Disabled"
+                self.clustersCountTextField.isEnabled = false
+            } else {
+                self.clustersCountTextField.placeholder = "Clusters count"
+                self.clustersCountTextField.isEnabled = true
+            }
+        }
+    }
 
     override func loadView() {
         self.view = UIView()
@@ -34,13 +60,15 @@ class ViewController: UIViewController {
         self.clustersCountTextField = UITextField()
         self.pointsCountTextField = UITextField()
         self.startButton = UIButton(type: .system)
+        self.showResultsButton = UIButton(type: .system)
 
         self.segmentControl = UISegmentedControl(items: ["KMeans", "Maximin"])
 
         [self.segmentControl,
          self.clustersCountTextField,
          self.pointsCountTextField,
-         self.startButton].forEach { self.stackView.addArrangedSubview($0) }
+         self.startButton,
+         self.showResultsButton].forEach { self.stackView.addArrangedSubview($0) }
 
         self.imageView = UIImageView()
         self.view.addSubview(self.imageView)
@@ -63,6 +91,7 @@ class ViewController: UIViewController {
 
         self.stackView.axis = .vertical
         self.stackView.distribution = .fillEqually
+        self.stackView.spacing = 10
 
         [self.pointsCountTextField,
          self.clustersCountTextField].forEach { $0?.textAlignment = .center }
@@ -71,37 +100,80 @@ class ViewController: UIViewController {
         self.clustersCountTextField.placeholder = "Clusters count"
 
         self.segmentControl.selectedSegmentIndex = 0
+        self.segmentControl.addTarget(self, action: #selector(segmentControlChanged), for: .valueChanged)
+
+        self.loader.tintColor = .black
 
         self.imageView.contentMode = .scaleAspectFit
         self.imageView.layer.cornerRadius = 10.0
         self.imageView.clipsToBounds = true
 
-        self.startButton.backgroundColor = .orange
-        self.startButton.layer.cornerRadius = 10
-        self.startButton.clipsToBounds = true
-        let attriburedTitle = NSAttributedString(
-            string: "Press",
+        self.showResultsButton.backgroundColor = .purple
+        self.showResultsButton.layer.cornerRadius = 10
+        self.showResultsButton.clipsToBounds =  true
+        let attriburedResultsTitle = NSAttributedString(
+            string: "Show results",
             attributes: [
                 .font: UIFont(name: "Avenir-Roman", size: 30)!,
                 .foregroundColor: UIColor.white
             ]
         )
-        self.startButton.setAttributedTitle(attriburedTitle, for: .normal)
+        self.showResultsButton.setAttributedTitle(attriburedResultsTitle, for: .normal)
+        self.showResultsButton.addTarget(self, action: #selector(showButtonTapped), for: .touchUpInside)
+
+        self.startButton.backgroundColor = .orange
+        self.startButton.layer.cornerRadius = 10
+        self.startButton.clipsToBounds = true
+        let attriburedStartTitle = NSAttributedString(
+            string: "Press to resolve",
+            attributes: [
+                .font: UIFont(name: "Avenir-Roman", size: 30)!,
+                .foregroundColor: UIColor.white
+            ]
+        )
+        self.startButton.setAttributedTitle(attriburedStartTitle, for: .normal)
         self.startButton.addTarget(self, action: #selector(startButtonTapped), for: .touchUpInside)
     }
 
-    @objc private func startButtonTapped() {
-        guard
-            let clusterCount = Int(self.clustersCountTextField.text ?? "-"),
-            let pointsCount = Int(self.pointsCountTextField.text ?? "-")
-        else { return }
+    @objc private func segmentControlChanged(_ sender: UISegmentedControl) {
+        let selectedIndex = sender.selectedSegmentIndex
+        self.currentResolverType = ResolverType.resolverAt(selectedIndex)
+    }
 
-        let pointsProvider = KMeans(
-            numberOfPoints: pointsCount,
-            numberOfClusters: clusterCount,
-            windowSize: self.imageView.frame.size // CGSize(width: 512, height: 512)
+    @objc private func showButtonTapped() {
+        let resultViewController = ResultViewController(
+            provider: self.resolveProvider,
+            colors: self.resultColors
         )
+        self.present(resultViewController, animated: true, completion: nil)
+    }
 
+    @objc private func startButtonTapped() {
+        var clustersCount = 0
+        if !(self.currentResolverType == .maximin) {
+            guard let count = Int(self.clustersCountTextField.text ?? "-") else { return }
+            clustersCount = count
+        }
+
+        guard let pointsCount = Int(self.pointsCountTextField.text ?? "-") else { return }
+
+        var pointsProvider: IResolver
+
+        switch self.currentResolverType {
+        case .kmeans:
+            pointsProvider = KMeans(
+                numberOfPoints: pointsCount,
+                numberOfClusters: clustersCount,
+                windowSize: self.imageView.frame.size // CGSize(width: 512, height: 512)
+            )
+        case .maximin:
+            pointsProvider = Maximin(
+                numberOfPoints: pointsCount,
+                size: self.imageView.frame.size
+            )
+        }
+
+        self.resolveProvider = pointsProvider
         self.loader.startAnimating()
 
         self.drawImage(with: pointsProvider, for: self.imageView.frame.size) { [weak self] image in
@@ -112,8 +184,9 @@ class ViewController: UIViewController {
         }
     }
 
-    private func drawImage(with pointsProvider: KMeans, for size: CGSize, completion: ((UIImage) -> Void)?) {
-        DispatchQueue.global(qos: .userInteractive).async {
+    private func drawImage(with pointsProvider: IResolver, for size: CGSize, completion: ((UIImage) -> Void)?) {
+        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+            self?.resultColors = []
             let renderer = UIGraphicsImageRenderer(size: CGSize(width: size.width + 20, height: size.height + 20))
             let img = renderer.image { ctx in
                 ctx.cgContext.setLineWidth(1)
@@ -124,9 +197,10 @@ class ViewController: UIViewController {
                         green: CGFloat(Int.random(in: 0..<256)) / 255.0,
                         blue: CGFloat(Int.random(in: 0..<256)) / 255.0,
                         alpha: 1
-                    ).cgColor
+                    )
+                    self?.resultColors.append(randColor)
                     ctx.cgContext.setStrokeColor(UIColor.white.cgColor)
-                    ctx.cgContext.setFillColor(randColor)
+                    ctx.cgContext.setFillColor(randColor.cgColor)
 
                     for point in cluster.points {
                         let rectangle = CGRect(x: point.x, y: point.y, width: 20, height: 20)
