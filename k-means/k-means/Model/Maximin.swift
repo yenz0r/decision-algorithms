@@ -15,17 +15,20 @@ class Maximin: IResolver {
     private var points: [CGPoint] = []
     var clusters: [Cluster] = []
 
-    private let size: CGSize
+    private let maxSize: CGSize
+
+    var size: CGSize {
+        return self.maxSize
+    }
 
     private var maxDistance: CGFloat = 0
     private var newCentroid: CGPoint = CGPoint.zero
 
     init(numberOfPoints: Int, size: CGSize) {
         self.numberOfPoints = numberOfPoints
-        self.size = size
+        self.maxSize = size
 
         self.points = self.configureRandomPoints()
-        self.search()
     }
 
     func search() {
@@ -136,7 +139,7 @@ class Maximin: IResolver {
         }
     }
 
-    private func getDistance(point: CGPoint, centroid: CGPoint) -> CGFloat {
+    func getDistance(point: CGPoint, centroid: CGPoint) -> CGFloat {
         let x = centroid.x - point.x
         let y = centroid.y - point.y
         return sqrt(pow(x, 2) + pow(y, 2))
@@ -150,8 +153,8 @@ class Maximin: IResolver {
         var result = [CGPoint]()
         (0..<self.numberOfPoints).forEach { _ in
             result.append(CGPoint(
-                x: Int.random(in: 0..<Int(size.width)),
-                y: Int.random(in: 0..<Int(size.height)))
+                x: Int.random(in: 0..<Int(maxSize.width)),
+                y: Int.random(in: 0..<Int(maxSize.height)))
             )
         }
         return result

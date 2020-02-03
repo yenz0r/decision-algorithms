@@ -37,7 +37,9 @@ class ResultViewController: UIViewController {
         super.viewDidLoad()
 
         self.tableView.dataSource = self
+        self.tableView.delegate = self
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "resultPointCell")
+        
     }
 }
 
@@ -56,5 +58,14 @@ extension ResultViewController: UITableViewDataSource {
         cell.textLabel?.text = "x = \(point.x) ~ y = \(point.y)"
         cell.backgroundColor = self.pointsProvider.clusters[indexPath.section].colors[indexPath.row]
         return cell
+    }
+}
+
+extension ResultViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let detailViewController = DetailViewController(provider: self.pointsProvider, indexPath: indexPath)
+        detailViewController.onCloseButtonTap = { [weak self] in self?.dismiss(animated: true, completion: nil) }
+        detailViewController.modalPresentationStyle = .overFullScreen
+        self.present(detailViewController, animated: true, completion: nil)
     }
 }

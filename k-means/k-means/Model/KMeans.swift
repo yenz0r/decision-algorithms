@@ -18,6 +18,10 @@ class KMeans: IResolver {
 
     private let windowSize: CGSize
 
+    var size: CGSize {
+        return self.windowSize
+    }
+
     init(numberOfPoints: Int,
          numberOfClusters: Int,
          windowSize: CGSize) {
@@ -27,7 +31,6 @@ class KMeans: IResolver {
 
         self.points = self.configureRandomPoints()
         self.clusters = self.configureRandomClusters()
-        self.search()
     }
 
     private func configureRandomPoints() -> [CGPoint] {
@@ -81,9 +84,9 @@ class KMeans: IResolver {
         }
     }
 
-    private func getDistance(point: CGPoint, cetroid: CGPoint) -> CGFloat {
-        let x = cetroid.x - point.x
-        let y = cetroid.y - point.y
+    func getDistance(point: CGPoint, centroid: CGPoint) -> CGFloat {
+        let x = centroid.x - point.x
+        let y = centroid.y - point.y
 
         return sqrt(pow(x, 2) + pow(y, 2))
     }
@@ -108,7 +111,7 @@ class KMeans: IResolver {
             var min: CGFloat = 100000
             for index in 0..<self.numberOfClusters {
                 let cluster = self.clusters[index]
-                distance = self.getDistance(point: point, cetroid: cluster.cetroid)
+                distance = self.getDistance(point: point, centroid: cluster.cetroid)
                 if distance < min {
                     min = distance
                     clusterIndex = index
@@ -130,7 +133,7 @@ class KMeans: IResolver {
             let currentCentroids = self.getCentroids()
             var distance: CGFloat = 0
             for index in 0..<lastCentroids.count {
-                distance += self.getDistance(point: lastCentroids[index], cetroid: currentCentroids[index])
+                distance += self.getDistance(point: lastCentroids[index], centroid: currentCentroids[index])
             }
             if (distance == 0) {
                 finish = true;

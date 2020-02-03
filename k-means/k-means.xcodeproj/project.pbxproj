@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		B995B26423E716CF006B04B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B995B26323E716CF006B04B8 /* AppDelegate.swift */; };
 		B995B26623E716CF006B04B8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B995B26523E716CF006B04B8 /* SceneDelegate.swift */; };
-		B995B26823E716CF006B04B8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B995B26723E716CF006B04B8 /* ViewController.swift */; };
+		B995B26823E716CF006B04B8 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B995B26723E716CF006B04B8 /* MainViewController.swift */; };
 		B995B26B23E716CF006B04B8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B995B26923E716CF006B04B8 /* Main.storyboard */; };
 		B995B26D23E716D1006B04B8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B995B26C23E716D1006B04B8 /* Assets.xcassets */; };
 		B995B27023E716D1006B04B8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B995B26E23E716D1006B04B8 /* LaunchScreen.storyboard */; };
@@ -18,6 +18,8 @@
 		B995B27D23E73B1C006B04B8 /* Maximin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B995B27C23E73B1C006B04B8 /* Maximin.swift */; };
 		B995B27F23E73B40006B04B8 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = B995B27E23E73B40006B04B8 /* Protocols.swift */; };
 		B995B28123E74CD1006B04B8 /* ResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B995B28023E74CD1006B04B8 /* ResultsViewController.swift */; };
+		C6034ED223E8080D00C0F791 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6034ED123E8080D00C0F791 /* DetailViewController.swift */; };
+		C6034ED523E8082D00C0F791 /* Drawer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6034ED423E8082D00C0F791 /* Drawer.swift */; };
 		D70777A25D41C2A36C9057B3 /* Pods_k_means.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9CAC3D3777E3E0333286544 /* Pods_k_means.framework */; };
 /* End PBXBuildFile section */
 
@@ -27,7 +29,7 @@
 		B995B26023E716CF006B04B8 /* k-means.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "k-means.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B995B26323E716CF006B04B8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B995B26523E716CF006B04B8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		B995B26723E716CF006B04B8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		B995B26723E716CF006B04B8 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		B995B26A23E716CF006B04B8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B995B26C23E716D1006B04B8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B995B26F23E716D1006B04B8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -37,6 +39,8 @@
 		B995B27C23E73B1C006B04B8 /* Maximin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Maximin.swift; sourceTree = "<group>"; };
 		B995B27E23E73B40006B04B8 /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		B995B28023E74CD1006B04B8 /* ResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsViewController.swift; sourceTree = "<group>"; };
+		C6034ED123E8080D00C0F791 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		C6034ED423E8082D00C0F791 /* Drawer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drawer.swift; sourceTree = "<group>"; };
 		C9CAC3D3777E3E0333286544 /* Pods_k_means.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_k_means.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -75,8 +79,7 @@
 			children = (
 				B995B26323E716CF006B04B8 /* AppDelegate.swift */,
 				B995B26523E716CF006B04B8 /* SceneDelegate.swift */,
-				B995B26723E716CF006B04B8 /* ViewController.swift */,
-				B995B28023E74CD1006B04B8 /* ResultsViewController.swift */,
+				C6034ED323E8081600C0F791 /* View */,
 				B995B27B23E71887006B04B8 /* Model */,
 				B995B26923E716CF006B04B8 /* Main.storyboard */,
 				B995B26C23E716D1006B04B8 /* Assets.xcassets */,
@@ -103,6 +106,17 @@
 				C9CAC3D3777E3E0333286544 /* Pods_k_means.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C6034ED323E8081600C0F791 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				B995B26723E716CF006B04B8 /* MainViewController.swift */,
+				C6034ED123E8080D00C0F791 /* DetailViewController.swift */,
+				B995B28023E74CD1006B04B8 /* ResultsViewController.swift */,
+				C6034ED423E8082D00C0F791 /* Drawer.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		D1A9BA433AD002F58FD69626 /* Pods */ = {
@@ -229,7 +243,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B995B26823E716CF006B04B8 /* ViewController.swift in Sources */,
+				C6034ED523E8082D00C0F791 /* Drawer.swift in Sources */,
+				C6034ED223E8080D00C0F791 /* DetailViewController.swift in Sources */,
+				B995B26823E716CF006B04B8 /* MainViewController.swift in Sources */,
 				B995B27D23E73B1C006B04B8 /* Maximin.swift in Sources */,
 				B995B27F23E73B40006B04B8 /* Protocols.swift in Sources */,
 				B995B26423E716CF006B04B8 /* AppDelegate.swift in Sources */,
@@ -381,15 +397,17 @@
 			baseConfigurationReference = 5E8A52F29A94D385B2C6544F /* Pods-k-means.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = F69M5SBR3W;
+				DEVELOPMENT_TEAM = STB535R58P;
 				INFOPLIST_FILE = "k-means/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "yenz0redd.k-means";
+				PRODUCT_BUNDLE_IDENTIFIER = "yenz0redd.k-means1";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -400,15 +418,17 @@
 			baseConfigurationReference = 868980FD2D9F96BBA9567715 /* Pods-k-means.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = F69M5SBR3W;
+				DEVELOPMENT_TEAM = STB535R58P;
 				INFOPLIST_FILE = "k-means/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "yenz0redd.k-means";
+				PRODUCT_BUNDLE_IDENTIFIER = "yenz0redd.k-means1";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
